@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: b620d6327b15e848ad419ba68fd1f820e050c8376459bc8739b520880e83323b
+-- hash: c58dd54156c225ba6911882de578d25fb2347e1b073de4714d40e251ff6d843f
 
 name:           Probs1to100
 version:        0.1.0.0
@@ -35,6 +35,7 @@ library
       src
   build-depends:
       base >=4.7 && <5
+    , mtl
   default-language: Haskell2010
 
 executable Probs1to100-exe
@@ -47,6 +48,7 @@ executable Probs1to100-exe
   build-depends:
       Probs1to100
     , base >=4.7 && <5
+    , mtl
   default-language: Haskell2010
 
 test-suite Probs1to100-test
@@ -60,4 +62,5 @@ test-suite Probs1to100-test
   build-depends:
       Probs1to100
     , base >=4.7 && <5
+    , mtl
   default-language: Haskell2010
