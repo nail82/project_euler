@@ -27,7 +27,7 @@ startState = (1,2,2)
 sumHelper :: (Int, Int, Int) -> (Int, Int, Int)
 sumHelper (nm2, nm1, s) =
     let c = nm2 + nm1
-        s' = case mod c 2 of
-               0 -> s+c
-               1 -> s
+        s' = case even c of
+               True -> s+c
+               False -> s
     in (nm1, c, s')
