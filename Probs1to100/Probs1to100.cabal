@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: d0d78e082f4724374f2d94259a4322630bfb713c6d8fef972c634d399b5c357e
+-- hash: 5ee52d6268a31e78fe1fee27a0450de9e467526dc3f3bdce503119ff9a90b941
 
 name:           Probs1to100
 version:        0.1.0.0
@@ -30,6 +30,7 @@ library
       Prob1
       Prob2
       Prob3
+      VectorTry
   other-modules:
       Paths_Probs1to100
   hs-source-dirs:
