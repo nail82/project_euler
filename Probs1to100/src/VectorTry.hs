@@ -1,4 +1,3 @@
-{-# LANGUAGE FlexibleContexts #-}
 module VectorTry where
 
 import           Control.Monad.Primitive (PrimMonad, PrimState)
@@ -22,14 +21,6 @@ mutableDoIt = do
   M.write mutable 0 (42 :: Int)
   vector <- U.unsafeFreeze mutable
   putStrLn $ show vector
-
-addInt :: (PrimMonad m, M.MVector v Int)
-           => v (PrimState m) Int
-               -> Int
-               -> Int
-               -> m ()
-addInt v i w = do
-  M.write v i w
 
 unboxedDoIt :: U.Vector Int -> U.Vector Int
 unboxedDoIt v =
