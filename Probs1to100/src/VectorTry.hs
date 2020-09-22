@@ -22,17 +22,17 @@ mutableDoIt = do
   vector <- U.unsafeFreeze mutable
   putStrLn $ show vector
 
-unboxedDoIt :: U.Vector Int -> U.Vector Int
-unboxedDoIt v =
+unboxedDoIt :: Int -> U.Vector Int -> U.Vector Int
+unboxedDoIt s v =
     let end = U.length v
-        loop v i =
+        loop i v =
             case i < end of
-              True -> let v' = v // [(i, i+1)]
-                      in loop v' (i+1)
+              True -> let v' = v // [(i, 0)]
+                      in loop (i+s) v'
               False -> v
-    in loop v 0
+    in loop s v
 
 main1 :: IO ()
 main1 = do
-  let v = U.replicate 10 (0 :: Int)
-  print $ unboxedDoIt v
+  let v = U.enumFromTo 0 10
+  print $ unboxedDoIt 2 v

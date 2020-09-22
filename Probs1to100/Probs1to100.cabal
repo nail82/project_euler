@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: bc754c91e50934ee25235f60be7b36d89e84c80e372264ca8110c6fb01ae02c0
+-- hash: ca5bdd6a62c0d46c35d609118acad619b707e09d18a532026a81f8387c594f7e
 
 name:           Probs1to100
 version:        0.1.0.0
@@ -37,6 +37,7 @@ library
       src
   build-depends:
       base >=4.7 && <5
+    , containers
     , mtl
     , primitive
     , vector
@@ -52,6 +53,7 @@ executable Probs1to100-exe
   build-depends:
       Probs1to100
     , base >=4.7 && <5
+    , containers
     , mtl
     , primitive
     , vector
@@ -68,6 +70,7 @@ test-suite Probs1to100-test
   build-depends:
       Probs1to100
     , base >=4.7 && <5
+    , containers
     , mtl
     , primitive
     , vector
