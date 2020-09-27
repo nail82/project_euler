@@ -1,4 +1,8 @@
-module Prob3 where
+module Prob3
+    (
+     run3
+    )
+    where
 
 import qualified GHC.Float as F
 import qualified Data.Set as S
