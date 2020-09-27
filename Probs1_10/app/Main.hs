@@ -6,6 +6,7 @@ import Prob3
 import Prob4
 import Prob5
 import Prob6
+import Prob7
 
 main :: IO ()
 main = do
@@ -15,3 +16,4 @@ main = do
   run4
   run5
   run6
+  run7
