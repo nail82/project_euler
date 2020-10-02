@@ -15,6 +15,8 @@ import Data.Vector.Unboxed ((!), (//))
 
 -- Sieving isn't going to work, bigOne is too big
 
+croot = ceiling . sqrt
+
 bigOne :: Int
 bigOne = 600851475143
 
@@ -48,7 +50,7 @@ singleFactor 0 = (0,1)
 singleFactor 1 = (1,1)
 singleFactor 2 = (2,1)
 singleFactor n =
-    let a = ceiling $ sqrt $ fromIntegral n
+    let a = croot $ fromIntegral n
     in go a n
         where
           go a' n = case S.member b2 squares of
