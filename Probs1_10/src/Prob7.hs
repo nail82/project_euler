@@ -31,34 +31,23 @@ ans = undefined
 croot = ceiling . sqrt
 
 
-nthHelper :: Int -> Int
-nthHelper n = undefined
+nthHelper = undefined
 
-findNextPrime :: Int -> Int -> U.Vector Int -> U.Vector Int
--- p is the candiate prime
--- i is the index where we'll park the new prime
--- k is the current index we're checking
-findNextPrime p i v = undefined
-
-outerloop :: Int -> U.Vector Int -> Int
-outerloop p v =
+findNextPrime :: Int -> U.Vector Int -> Int
+findNextPrime p v =
     let stop = croot $ fromIntegral p
         k = 0
         p' = innerloop p k stop v
     in case p' > 0 of
          True -> p'
-         False -> outerloop (p + 1) v
-
-
-innerloop :: Int -> Int -> Int -> U.Vector Int -> Int
-innerloop p k stop v =
-    case v ! k > stop of
-      True -> p
-      False -> case p `rem` (v ! k) == 0 of
-                 True -> 0
-                 False -> innerloop p (k + 1) stop v
-
-
+         False -> findNextPrime (p + 1) v
+    where
+      innerloop p k stop v =
+          case v ! k > stop of
+            True -> p
+            False -> case p `rem` (v ! k) == 0 of
+                       True -> 0
+                       False -> innerloop p (k + 1) stop v
 
 
 nthPrime :: Int -> Int
