@@ -51,10 +51,13 @@ nthHelper = undefined
 
 findNext :: U.Vector Int -> (Int, U.Vector Int)
 findNext s =
-    let nextIdx = U.elemIndex 0 s
-        lastPrime = s ! (nextIdx - 1)
-        nextPrime = findNextPrime lastPrime s
-    in (nextPrime, U.update s $ U.fromList [(nextIdx, nextPrime)])
+    case mIdx of
+      Nothing -> (U.last s, s)
+      Just nextIdx ->
+          let lastPrime = s ! (nextIdx - 1)
+              nextPrime = findNextPrime lastPrime s
+          in (nextPrime, U.update s $ U.fromList [(nextIdx, nextPrime)])
+    where mIdx = U.elemIndex 0 s
 
 
 
