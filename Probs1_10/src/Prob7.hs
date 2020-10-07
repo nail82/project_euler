@@ -2,7 +2,7 @@ module Prob7 where
 
 import qualified Data.Vector.Unboxed as U
 import Data.Vector.Unboxed ((!), (//), (++))
---import Control.Monad.Trans.State
+import Control.Monad.State
 
 {-
   By listing the first six prime numbers: 2, 3, 5, 7, 11, and 13, we can
@@ -47,25 +47,28 @@ ans = undefined
 croot :: Double -> Int
 croot = ceiling . sqrt
 
-nthHelper = undefined
+doTwo = do
+  replicateM 3 fillPrimes
 
-findNext :: U.Vector Int -> (Int, U.Vector Int)
-findNext s =
+fillPrimes :: StateT (U.Vector Int) Maybe Int
+fillPrimes = StateT $ \s -> fillOne s
+
+fillOne :: U.Vector Int -> Maybe (Int, U.Vector Int)
+fillOne s =
     case mIdx of
-      Nothing -> (U.last s, s)
+      Nothing -> Just (U.last s, s)
       Just nextIdx ->
           let lastPrime = s ! (nextIdx - 1)
-              nextPrime = findNextPrime lastPrime s
-          in (nextPrime, U.update s $ U.fromList [(nextIdx, nextPrime)])
+              nextPrime = findNextPrime (lastPrime+1) s
+          in Just (nextPrime, U.update s $ U.fromList [(nextIdx, nextPrime)])
     where mIdx = U.elemIndex 0 s
-
 
 
 findNextPrime :: Int -> U.Vector Int -> Int
 findNextPrime p v =
     let stop = croot $ fromIntegral p
         k = 0
-        p' = innerloop p k stop v
+        p' = innerloop p 0 stop v
     in case p' > 0 of
          -- p' is prime
          True -> p'
@@ -83,13 +86,16 @@ findNextPrime p v =
                        False -> innerloop p (k + 1) stop v
 
 
-nthPrime :: Int -> Int
+nthPrime :: Int -> Maybe Int
 nthPrime n
-    | n < 1 = 1
-    | otherwise = let f670 = first670
-                  in case (n - 1) < U.length f670 of
-                       True -> f670 ! (n - 1)
-                       False -> nthHelper n
+    | n < 1 = Just 1
+    | n < (U.length first670) + 1 = Just $ first670 ! (n - 1)
+    | otherwise = undefined
+        -- do let ext = extend670 n
+        --    jps <- replicateM (n-670) fillPrimes
+        --    case jps of
+        --      Just (primes, _) -> Just $ U.last primes
+
 
 -- Generate the first few primes
 sieve :: U.Vector Int -> U.Vector Int
