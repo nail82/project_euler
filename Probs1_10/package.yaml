@@ -26,6 +26,7 @@ dependencies:
 - primitive
 - containers
 - transformers
+- raw-strings-qq
 
 library:
   source-dirs: src
