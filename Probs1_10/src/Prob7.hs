@@ -47,21 +47,15 @@ ans n
     | n < 671   = Just $ first670 ! (n - 1)
     | otherwise = do let ext = extend670 n
                          n' = n - 670
-                     primes <- evalStateT (doMultiples n') ext
+                     primes <- evalStateT (fillPrimes n') ext
                      case primes of
                        [] -> Nothing
                        otherwise -> Just (last primes)
 
 
-croot :: Double -> Int
-croot = ceiling . sqrt
-
-doMultiples :: Int -> StateT (U.Vector Int) Maybe [Int]
-doMultiples n = do
-  replicateM n fillPrimes
-
-fillPrimes :: StateT (U.Vector Int) Maybe Int
-fillPrimes = StateT $ \s -> fillOne s
+fillPrimes :: Int -> StateT (U.Vector Int) Maybe [Int]
+fillPrimes n = do
+  replicateM n (StateT $ \s -> fillOne s)
 
 fillOne :: U.Vector Int -> Maybe (Int, U.Vector Int)
 fillOne s =
@@ -69,37 +63,37 @@ fillOne s =
       Nothing -> Just (U.last s, s)
       Just nextIdx ->
           let lastPrime = s ! (nextIdx - 1)
-              nextPrime = findNextPrime (lastPrime+1) s
+              nextPrime = findNextPrime (lastPrime+2) s
           in Just (nextPrime, U.update s $ U.fromList [(nextIdx, nextPrime)])
     where mIdx = U.elemIndex 0 s
 
 
 findNextPrime :: Int -> U.Vector Int -> Int
 findNextPrime p v =
-    let stop = croot $ fromIntegral p
+    let rootp = croot $ fromIntegral p
         k = 0
-        p' = innerloop p 0 stop v
+        p' = innerloop p 0 rootp v
     in case p' > 0 of
          -- p' is prime
          True -> p'
          -- check the next interger / keep looking
          False -> findNextPrime (p + 1) v
     where
-      innerloop p k stop v =
-          case v ! k > stop of
+      innerloop p k rootp v =
+          case v ! k > rootp of
             -- p is prime
             True -> p
             False -> case p `rem` (v ! k) == 0 of
                        -- p isn't prime
                        True -> 0
                        -- keep checking if p is prime
-                       False -> innerloop p (k + 1) stop v
+                       False -> innerloop p (k + 1) rootp v
 
 
+-- Generate the first few primes and utility functions
+croot :: Double -> Int
+croot = ceiling . sqrt
 
-
-
--- Generate the first few primes
 sieve :: U.Vector Int -> U.Vector Int
 sieve v =
     let loop i v =
