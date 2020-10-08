@@ -1,4 +1,8 @@
-module Prob7 where
+module Prob7
+    (
+     run7
+    )
+    where
 
 import qualified Data.Vector.Unboxed as U
 import Data.Vector.Unboxed ((!), (//), (++))
@@ -20,15 +24,9 @@ import Control.Monad.State
 
 {-
   Reading learn u a haskell about the state monad
-  - State is definitely the way to go with this computation.  I see glimmers
-    of how to do it, but it's still trying to coalesce in my head.
-
-  - Here's what I'm thinking for types
-  findNext :: U.Vector -> (Int, U.Vector)
-  wrapFind :: State findNext
-
-  - Finding the nth prime will look something like:
-  runState nthPrime $ extend670 n
+  - State is definitely the way to go with this computation.
+    Getting the types working and sorting out how to execute
+    the state computation was tricky.
 
   The initial state I need to give the machine is the extend670 n
   I think part of my problem is the random number generator examples
@@ -38,17 +36,29 @@ import Control.Monad.State
 run7 :: IO ()
 run7 = do
   putStr "Problem 7 => "
-  putStrLn "unsolved"
+  let jv = ans 10001
+  putStrLn $ case jv of
+               Just v -> show v
+               otherwise -> "Something broke"
 
+ans :: Int -> Maybe Int
+ans n
+    | n < 1     = Just 1
+    | n < 671   = Just $ first670 ! (n - 1)
+    | otherwise = do let ext = extend670 n
+                         n' = n - 670
+                     primes <- evalStateT (doMultiples n') ext
+                     case primes of
+                       [] -> Nothing
+                       otherwise -> Just (last primes)
 
-ans :: Int
-ans = undefined
 
 croot :: Double -> Int
 croot = ceiling . sqrt
 
-doTwo = do
-  replicateM 3 fillPrimes
+doMultiples :: Int -> StateT (U.Vector Int) Maybe [Int]
+doMultiples n = do
+  replicateM n fillPrimes
 
 fillPrimes :: StateT (U.Vector Int) Maybe Int
 fillPrimes = StateT $ \s -> fillOne s
@@ -86,15 +96,7 @@ findNextPrime p v =
                        False -> innerloop p (k + 1) stop v
 
 
-nthPrime :: Int -> Maybe Int
-nthPrime n
-    | n < 1 = Just 1
-    | n < (U.length first670) + 1 = Just $ first670 ! (n - 1)
-    | otherwise = undefined
-        -- do let ext = extend670 n
-        --    jps <- replicateM (n-670) fillPrimes
-        --    case jps of
-        --      Just (primes, _) -> Just $ U.last primes
+
 
 
 -- Generate the first few primes

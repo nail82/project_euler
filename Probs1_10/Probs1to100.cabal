@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 33951f6a52c9cf5a8fc96427b45b012a52b4734f25c0381fdeabe365fd05b889
+-- hash: c3b32810b13159218efd5761be63754f57fb5d90f1e04db7429e165827bfcdc8
 
 name:           Probs1to100
 version:        0.1.0.0
@@ -44,6 +44,7 @@ library
     , containers
     , mtl
     , primitive
+    , transformers
     , vector
   default-language: Haskell2010
 
@@ -60,6 +61,7 @@ executable Probs1to100-exe
     , containers
     , mtl
     , primitive
+    , transformers
     , vector
   default-language: Haskell2010
 
@@ -77,5 +79,6 @@ test-suite Probs1to100-test
     , containers
     , mtl
     , primitive
+    , transformers
     , vector
   default-language: Haskell2010

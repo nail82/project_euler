@@ -25,6 +25,7 @@ dependencies:
 - vector
 - primitive
 - containers
+- transformers
 
 library:
   source-dirs: src
