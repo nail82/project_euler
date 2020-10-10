@@ -2,6 +2,7 @@
 module Prob8 where
 
 import Text.RawString.QQ
+import Data.Vector.Unboxed as U
 
 {-
   The four adjacent digits in the 1000-digit number that have the
@@ -35,11 +36,15 @@ the greatest product. What is the value of this product?
 run8 :: IO ()
 run8 = do
   putStr "Problem 8 => "
-  putStrLn "not solved"
+  putStrLn $ show ans
+
+ans :: Int
+ans = let (_,m) = findMax U.product (0,0) 0 vectorBigNum
+      in m
+
 
 bigNum :: String
-bigNum = [r|
-73167176531330624919225119674426574742355349194934
+bigNum = [r|73167176531330624919225119674426574742355349194934
 96983520312774506326239578318016984801869478851843
 85861560789112949495459501737958331952853208805511
 12540698747158523863050715693290963295227443043557
@@ -60,3 +65,30 @@ bigNum = [r|
 05886116467109405077541002256983155200055935729725
 71636269561882670428252483600823257530420752963450
 |]
+
+vectorBigNum :: U.Vector Int
+vectorBigNum = U.map toInt $ U.fromList $ Prelude.concat $ lines bigNum
+
+toInt :: Char -> Int
+toInt c
+      | c == '0' = 0
+      | c == '1' = 1
+      | c == '2' = 2
+      | c == '3' = 3
+      | c == '4' = 4
+      | c == '5' = 5
+      | c == '6' = 6
+      | c == '7' = 7
+      | c == '8' = 8
+      | c == '9' = 9
+      | otherwise = 1
+
+
+findMax :: (U.Vector Int -> Int) -> (Int, Int) -> Int -> U.Vector Int -> (Int, Int)
+findMax f (l, m) lhs v =
+    case lhs + 13 >= (U.length v) of
+      True -> (l, m)
+      False -> let m' = max m $ f $ U.slice lhs 13 v
+               in case m' > m of
+                    True -> findMax f (lhs, m') (lhs + 1) v
+                    False -> findMax f (l, m) (lhs + 1) v
