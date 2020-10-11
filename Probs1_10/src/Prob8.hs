@@ -39,8 +39,8 @@ run8 = do
   putStrLn $ show ans
 
 ans :: Int
-ans = let (_,m) = findMax U.product (0,0) 0 vectorBigNum
-      in m
+ans = Prelude.foldr (findMaxFold U.product vectorBigNum) 0 [0..986]
+
 
 
 bigNum :: String
@@ -83,7 +83,7 @@ toInt c
       | c == '9' = 9
       | otherwise = 1
 
-
+-- Hand-rolled recursion
 findMax :: (U.Vector Int -> Int) -> (Int, Int) -> Int -> U.Vector Int -> (Int, Int)
 findMax f (l, m) lhs v =
     case lhs + 13 >= (U.length v) of
@@ -92,3 +92,7 @@ findMax f (l, m) lhs v =
                in case m' > m of
                     True -> findMax f (lhs, m') (lhs + 1) v
                     False -> findMax f (l, m) (lhs + 1) v
+
+-- Solve with a fold
+findMaxFold :: (U.Vector Int -> Int) -> U.Vector Int -> Int -> Int -> Int
+findMaxFold f v l z = max z $ f $ U.slice l 13 v
