@@ -1,6 +1,8 @@
 module Prob7
     (
      run7
+    ,first670
+    ,findNextPrime
     )
     where
 
