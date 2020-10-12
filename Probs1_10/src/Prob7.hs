@@ -1,6 +1,8 @@
 module Prob7
     (
      run7
+    ,first670
+    ,findNextPrime
     )
     where
 
@@ -50,7 +52,7 @@ ans n
                      primes <- evalStateT (fillPrimes n') ext
                      case primes of
                        [] -> Nothing
-                       otherwise -> Just (last primes)
+                       ps -> Just (last ps)
 
 
 fillPrimes :: Int -> StateT (U.Vector Int) Maybe [Int]
@@ -71,7 +73,6 @@ fillOne s =
 findNextPrime :: Int -> U.Vector Int -> Int
 findNextPrime p v =
     let rootp = croot $ fromIntegral p
-        k = 0
         p' = innerloop p 0 rootp v
     in case p' > 0 of
          -- p' is prime
@@ -79,15 +80,15 @@ findNextPrime p v =
          -- check the next interger / keep looking
          False -> findNextPrime (p + 1) v
     where
-      innerloop p k rootp v =
+      innerloop p'' k rootp v' =
           case v ! k > rootp of
             -- p is prime
-            True -> p
-            False -> case p `rem` (v ! k) == 0 of
+            True -> p''
+            False -> case p'' `rem` (v' ! k) == 0 of
                        -- p isn't prime
                        True -> 0
                        -- keep checking if p is prime
-                       False -> innerloop p (k + 1) rootp v
+                       False -> innerloop p'' (k + 1) rootp v'
 
 
 -- Generate the first few primes and utility functions
@@ -96,21 +97,21 @@ croot = ceiling . sqrt
 
 sieve :: U.Vector Int -> U.Vector Int
 sieve v =
-    let loop i v =
+    let loop i w =
             case i^2 < (U.length v) of
-              True -> let v' = sieveHelper i v
+              True -> let v' = sieveHelper i w
                       in loop (i+1) v'
-              False -> v
+              False -> w
     in U.filter (>1) $ loop 2 v
 
 sieveHelper :: Int -> U.Vector Int -> U.Vector Int
 sieveHelper k v =
     let end = U.length v
-        loop i v =
+        loop i w =
             case i < end of
-              True -> let v' = v // [(i, 0)]
+              True -> let v' = w // [(i, 0)]
                       in loop (i+k) v'
-              False -> v
+              False -> w
     in loop (k^2) v
 
 first670 :: U.Vector Int
@@ -119,8 +120,5 @@ first670 = let xs = U.fromList [0..5003 :: Int]
 
 extend670 :: Int -> U.Vector Int
 extend670 n = let f670 = first670
-                  backSide = U.generate (n - U.length f670) (\x -> 0 :: Int)
+                  backSide = U.generate (n - U.length f670) (\_ -> 0 :: Int)
               in (U.++) f670 backSide
-
-myStateF :: Int -> (Int, Int)
-myStateF x = (x+2, x+3)
