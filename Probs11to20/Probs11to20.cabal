@@ -1,0 +1,90 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.33.0.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: 639543c81d144582bf576c597b4d17f88f05af4efa0f5dc2112b3255f550079f
+
+name:           Probs11to20
+version:        0.1.0.0
+description:    Please see the README on GitHub at <https://github.com/nail82/Probs11to20#readme>
+homepage:       https://github.com/nail82/Probs11to20#readme
+bug-reports:    https://github.com/nail82/Probs11to20/issues
+author:         Ted Satcher
+maintainer:     ted.satcher@gmail.com
+copyright:      BSD3
+license:        BSD3
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+    README.md
+    ChangeLog.md
+
+source-repository head
+  type: git
+  location: https://github.com/nail82/Probs11to20
+
+library
+  exposed-modules:
+      Lib
+      Prob11
+      Prob12
+      Prob13
+      Prob14
+      Prob15
+      Prob16
+      Prob17
+      Prob18
+      Prob19
+      Prob20
+  other-modules:
+      Paths_Probs11to20
+  hs-source-dirs:
+      src
+  build-depends:
+      base >=4.7 && <5
+    , containers
+    , mtl
+    , primitive
+    , raw-strings-qq
+    , transformers
+    , vector
+  default-language: Haskell2010
+
+executable Probs11to20-exe
+  main-is: Main.hs
+  other-modules:
+      Paths_Probs11to20
+  hs-source-dirs:
+      app
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      Probs11to20
+    , base >=4.7 && <5
+    , containers
+    , mtl
+    , primitive
+    , raw-strings-qq
+    , transformers
+    , vector
+  default-language: Haskell2010
+
+test-suite Probs11to20-test
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  other-modules:
+      Paths_Probs11to20
+  hs-source-dirs:
+      test
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      Probs11to20
+    , base >=4.7 && <5
+    , containers
+    , mtl
+    , primitive
+    , raw-strings-qq
+    , transformers
+    , vector
+  default-language: Haskell2010
