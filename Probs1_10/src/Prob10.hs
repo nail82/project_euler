@@ -1,4 +1,8 @@
-module Prob10 where
+module Prob10
+    (
+     run10
+    )
+    where
 
 import qualified Data.Vector.Unboxed as U
 import Prob7
