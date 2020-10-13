@@ -12,15 +12,25 @@ import Prob7
 run10 :: IO ()
 run10 = do
   putStr "Problem 10 => "
-  putStrLn "not solved"
+  putStrLn $ show ans
 
 ans :: Int
-ans = undefined
+ans = sumPrimes first670 (MaxPrime 2000000) (CurrentPrime 1) (CurrentSum 1)
 
--- Kick this off with first670 2000000 5003 $ U.sum first670
-sumPrimes :: U.Vector Int -> Int -> Int -> Int -> Int
-sumPrimes v n m s =
+newtype MaxPrime =
+    MaxPrime Int
+
+newtype CurrentPrime =
+    CurrentPrime Int
+
+newtype CurrentSum =
+    CurrentSum Int
+
+
+sumPrimes :: U.Vector Int -> MaxPrime -> CurrentPrime -> CurrentSum -> Int
+sumPrimes v (MaxPrime n) (CurrentPrime m) (CurrentSum s) =
           case m >= n of
             True -> s
             False -> let next = findNextPrime (m + 2) v
-                     in sumPrimes v n next (s+m)
+                         s' = s + m
+                     in sumPrimes v (MaxPrime n) (CurrentPrime next) (CurrentSum s')
