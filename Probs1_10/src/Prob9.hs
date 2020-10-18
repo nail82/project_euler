@@ -21,7 +21,7 @@ run9 = do
   let ja = ans 1000
   case ja of
     Nothing -> putStrLn "Didn't find an answer"
-    Just abc -> putStrLn $ show abc
+    Just (a,b,c) -> putStrLn $ show (a,b,c) <> " " <> show (a*b*c)
 
 ans :: Int -> Maybe (Int, Int, Int)
 ans k = let mn = searchForTrip k
