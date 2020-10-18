@@ -1,4 +1,8 @@
-module Prob9 where
+module Prob9
+    (
+     run9
+    )
+    where
 
 {-
 A Pythagorean triplet is a set of three natural numbers, a < b < c,
@@ -14,22 +18,35 @@ sqrt(a*a + b*b) + a + b = 1000
 run9 :: IO ()
 run9 = do
   putStr "Problem 9 => "
-  putStrLn "not solved"
+  let ja = ans 1000
+  case ja of
+    Nothing -> putStrLn "Didn't find an answer"
+    Just abc -> putStrLn $ show abc
 
-trySomething :: Double -> Double -> Double
-trySomething a b = sqrt (a*a + b*b) + a + b
+ans :: Int -> Maybe (Int, Int, Int)
+ans k = let mn = searchForTrip k
+        in case mn of
+             [] -> Nothing
+             t:_ -> Just $ pythagTriple (fst t) (snd t)
+
 
 -- Using Euclid's equation, given and m and n, find a,b,c
 pythagTriple :: Int -> Int -> (Int, Int, Int)
-pythagTriple m n = (a,b,c)
+pythagTriple m n
+    | m == n    = (0,0,0) -- degenerate triangle
+    | m <  n    = pythagTriple n m
+    | otherwise = (a,b,c)
     where a = m*m - n*n
           b = 2*m*n
           c = m*m + n*n
 
-isAlmostInt :: Float -> Bool
-isAlmostInt x = (abs $ x - (fromIntegral $ round x)) < err
-    where err = 1e-10
+checkIt :: Int -> (Int, Int) -> Bool
+checkIt k (m, n)
+    | m >= n = (2*m*(m+n) - k) == 0
+    | otherwise = checkIt k (n, m)
 
-isAlmostZero :: Double -> Bool
-isAlmostZero x = (abs x) < err
-    where err = 1e-10
+searchForTrip :: Int -> [(Int, Int)]
+searchForTrip k =
+    let cartProd = filter (\t -> fst t > snd t) [(m,n)| m <- [2..k], n <- [1..k-1]]
+        f = checkIt k
+    in filter f cartProd
