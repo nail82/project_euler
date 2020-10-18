@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 639543c81d144582bf576c597b4d17f88f05af4efa0f5dc2112b3255f550079f
+-- hash: 6cd29b89c97cd616fe8dade8950b388f170b18c28dd72e80f3fad638601f0fd0
 
 name:           Probs11to20
 version:        0.1.0.0
@@ -27,7 +27,6 @@ source-repository head
 
 library
   exposed-modules:
-      Lib
       Prob11
       Prob12
       Prob13
