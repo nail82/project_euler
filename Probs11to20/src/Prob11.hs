@@ -84,16 +84,15 @@ getRowProd = rcProd M.getRow
 getColProd = rcProd M.getCol
 
 checkDiags :: M.Matrix Int -> Int
-checkDiags m = let z' = foldr (*) 1 $ M.getDiag m
-               in max z' $ foldr (*) 1 $ getCounterDiag m
+checkDiags m = max (foldr (*) 1 $ M.getDiag m) (foldr (*) 1 $ getCounterDiag m)
 
 checkRc :: M.Matrix Int -> Int
-checkRc m = let z' = foldr max 0 $ fmap (getRowProd m) [1..4]
-            in max z' $ foldr max 0 $ fmap (getColProd m) [1..4]
+checkRc m = foldr max 0
+            $  (fmap (getRowProd m) [1..4])
+            <> (fmap (getColProd m) [1..4])
 
 checkSubMat :: M.Matrix Int -> Int
-checkSubMat m = let z' = checkRc m
-                in max z' $ checkDiags m
+checkSubMat m = max (checkRc m) (checkDiags m)
 
 getCounterDiag :: M.Matrix Int -> V.Vector Int
 getCounterDiag m =
@@ -102,5 +101,4 @@ getCounterDiag m =
     in V.fromList $ fmap getE idxs
 
 checkApp :: (Int, Int) -> (Int, Int) -> Int
-checkApp (r1, r2) (c1, c2) = let m' = M.submatrix r1 r2 c1 c2 dataGrid
-                             in checkSubMat m'
+checkApp (r1, r2) (c1, c2) = checkSubMat $ M.submatrix r1 r2 c1 c2 dataGrid
