@@ -27,6 +27,8 @@ dependencies:
 - containers
 - transformers
 - raw-strings-qq
+- matrix
+- parallel
 
 library:
   source-dirs: src

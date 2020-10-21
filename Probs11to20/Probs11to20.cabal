@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 6cd29b89c97cd616fe8dade8950b388f170b18c28dd72e80f3fad638601f0fd0
+-- hash: ceaf387b0c23a4667a1ab42084c655d891f1b3c91de5de6a566d5c8a80f44946
 
 name:           Probs11to20
 version:        0.1.0.0
@@ -44,7 +44,9 @@ library
   build-depends:
       base >=4.7 && <5
     , containers
+    , matrix
     , mtl
+    , parallel
     , primitive
     , raw-strings-qq
     , transformers
@@ -62,7 +64,9 @@ executable Probs11to20-exe
       Probs11to20
     , base >=4.7 && <5
     , containers
+    , matrix
     , mtl
+    , parallel
     , primitive
     , raw-strings-qq
     , transformers
@@ -81,7 +85,9 @@ test-suite Probs11to20-test
       Probs11to20
     , base >=4.7 && <5
     , containers
+    , matrix
     , mtl
+    , parallel
     , primitive
     , raw-strings-qq
     , transformers
