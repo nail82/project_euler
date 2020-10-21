@@ -83,17 +83,17 @@ rcProd getRC m i = foldr (*) 1 $ getRC i m
 getRowProd = rcProd M.getRow
 getColProd = rcProd M.getCol
 
-checkDiags :: M.Matrix Int -> Int -> Int
-checkDiags m z = let z' = max z $ foldr (*) 1 $ M.getDiag m
-                 in max z' $ foldr (*) 1 $ getCounterDiag m
+checkDiags :: M.Matrix Int -> Int
+checkDiags m = let z' = foldr (*) 1 $ M.getDiag m
+               in max z' $ foldr (*) 1 $ getCounterDiag m
 
-checkRc :: M.Matrix Int -> Int -> Int
-checkRc m z = let z' = max z $ foldr max 0 $ fmap (getRowProd m) [1..4]
-              in max z' $ foldr max 0 $ fmap (getColProd m) [1..4]
+checkRc :: M.Matrix Int -> Int
+checkRc m = let z' = foldr max 0 $ fmap (getRowProd m) [1..4]
+            in max z' $ foldr max 0 $ fmap (getColProd m) [1..4]
 
 checkSubMat :: M.Matrix Int -> Int
-checkSubMat m = let z' = checkRc m 0
-                in max z' $ checkDiags m 0
+checkSubMat m = let z' = checkRc m
+                in max z' $ checkDiags m
 
 getCounterDiag :: M.Matrix Int -> V.Vector Int
 getCounterDiag m =
