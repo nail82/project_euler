@@ -27,4 +27,13 @@ hundred divisors?
 run12 :: IO ()
 run12 = do
   putStr "Problem 12 => "
-  putStrLn "not solved"
+  putStrLn $ show $ numFactors $ triNum 10000
+
+
+triNum :: Int -> Int
+triNum n = (n ^ (2 :: Int) + n) `div` 2
+
+numFactors :: Int -> Int
+numFactors n = let xs = if n `rem` 2 == 0 then [1..n] else filter odd [1..n]
+                   f i = if n `rem` i == 0 then 1 else 0
+               in sum $ fmap f xs
