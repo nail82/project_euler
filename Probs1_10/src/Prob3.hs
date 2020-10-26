@@ -31,7 +31,7 @@ run3 = do
 
 -- A table of squares.  Could do this with a call to sqrt
 squares :: S.Set Int
-squares = S.fromList [(x^2) :: Int | x <- [0..ceiling $ sqrt (fromIntegral bigOne) + 1]]
+squares = S.fromList [ x ^ (2 :: Int) | x <- [0..ceiling $ sqrt (fromIntegral bigOne) + 1]]
 
 fermatFactors :: Int -> S.Set Int
 fermatFactors n =
@@ -53,11 +53,11 @@ singleFactor n =
     let a = croot $ fromIntegral n
     in go a n
         where
-          go a' n = case S.member b2 squares of
+          go a' n' = case S.member b2 squares of
                       True -> let rhs = F.double2Int $ (F.int2Double a') - (sqrt $ fromIntegral b2)
-                              in (n `div` rhs, rhs)
-                      False -> go (a'+1) n
-              where b2 = a'^2 - n
+                              in (n' `div` rhs, rhs)
+                      False -> go (a'+1) n'
+              where b2 = a' ^ (2 :: Int) - n'
 
 
 -- Fooling around with sieving
