@@ -7,7 +7,7 @@ module Prob7
     where
 
 import qualified Data.Vector.Unboxed as U
-import Data.Vector.Unboxed ((!), (//), (++))
+import Data.Vector.Unboxed ((!), (//))
 import Control.Monad.State
 
 {-
@@ -40,8 +40,8 @@ run7 = do
   putStr "Problem 7 => "
   let jv = ans 10001
   putStrLn $ case jv of
-               Just v -> show v
-               otherwise -> "Something broke"
+               Just v  -> show v
+               Nothing -> "Something broke"
 
 ans :: Int -> Maybe Int
 ans n
@@ -77,7 +77,7 @@ findNextPrime p v =
     in case p' > 0 of
          -- p' is prime
          True -> p'
-         -- check the next interger / keep looking
+         -- check the next integer / keep looking
          False -> findNextPrime (p + 1) v
     where
       innerloop p'' k rootp v' =
@@ -98,7 +98,7 @@ croot = ceiling . sqrt
 sieve :: U.Vector Int -> U.Vector Int
 sieve v =
     let loop i w =
-            case i^2 < (U.length v) of
+            case i ^ (2 :: Int) < (U.length v) of
               True -> let v' = sieveHelper i w
                       in loop (i+1) v'
               False -> w
@@ -112,7 +112,7 @@ sieveHelper k v =
               True -> let v' = w // [(i, 0)]
                       in loop (i+k) v'
               False -> w
-    in loop (k^2) v
+    in loop (k ^ (2 :: Int)) v
 
 first670 :: U.Vector Int
 first670 = let xs = U.fromList [0..5003 :: Int]
