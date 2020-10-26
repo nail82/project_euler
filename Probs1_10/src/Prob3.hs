@@ -1,6 +1,10 @@
 module Prob3
     (
      run3
+    , singleFactor
+    , squares
+    , croot
+    , fermatFactors
     )
     where
 
@@ -45,6 +49,7 @@ fermatLoop t xs
                    <> (fermatLoop (singleFactor $ snd t) xs)
 
 
+-- This will go into an infinite loop on an even number.  Derp.
 singleFactor :: Int -> (Int, Int)
 singleFactor 0 = (0,1)
 singleFactor 1 = (1,1)
