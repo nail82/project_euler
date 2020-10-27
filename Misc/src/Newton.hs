@@ -45,3 +45,14 @@ doIt (i, x0) = let x1 = xNext x0
                in case err <= epsilon of
                   True -> (i, x0)
                   False -> doIt (i+1, x1)
+
+linePairs :: Double -> (Double, Double, Double, Double)
+linePairs x0 = let y0 = h x0
+                   m  = h' x0
+                   (x1, y1) = pointSlope x0 y0 m
+               in (x0, x1, y0, y1)
+
+pointSlope :: Double -> Double -> Double -> (Double, Double)
+pointSlope x0 y0 m =
+    let y1 = y0 + m * (0 - x0)
+    in (0, y1)
