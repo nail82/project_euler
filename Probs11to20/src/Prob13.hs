@@ -218,23 +218,41 @@ shorty = [r|366845
 132638
 |]
 
+longer = [r|999999
+999999
+999999
+999999
+999999
+999999
+999999
+999999
+999999
+999999
+|]
+
 run13 :: IO ()
 run13 = do
+  let ansStr = L.intercalate "" $ fmap show ans
   putStr "Problem 13 => "
-  putStrLn "not solved"
+  putStrLn ansStr
+
+ans :: [Int]
+ans = formatAns $ reduceSums' (0,0) (getSums dataGrid) []
+
+makeGrid :: Int -> Int -> String -> M.Matrix Int
+makeGrid rows cols s = M.fromList rows cols
+                 $ fmap (\x -> read x :: Int)
+                 $ words
+                 $ L.intersperse ' ' s
 
 dataGrid :: M.Matrix Int
-dataGrid = M.fromList 100 50
-           $ fmap (\x -> read x :: Int)
-           $ words
-           $ L.intersperse ' ' strDataGrid
+dataGrid = makeGrid 100 50 strDataGrid
 
 shortyGrid :: M.Matrix Int
-shortyGrid = M.fromList 3 6
-             $ fmap (\x -> read x :: Int)
-             $ words
-             $ L.intersperse ' ' shorty
+shortyGrid = makeGrid 3 6 shorty
 
+longerGrid :: M.Matrix Int
+longerGrid = makeGrid 10 6 longer
 
 qr :: Integral a => a -> (a, a)
 qr = flip quotRem 10
@@ -247,9 +265,14 @@ sumCol m i =
 getSums :: M.Matrix Int -> [(Int, Int)]
 getSums m = reverse $ fmap (sumCol m) [1..(M.ncols m)]
 
-reduceSums :: (Int, Int) -> [(Int, Int)] -> [(Int, Int)]
-reduceSums t ts =
-    let h = head ts
-        v = fst t + snd h
+reduceSums' :: (Int, Int) -> [(Int, Int)] -> [Int] -> [Int]
+reduceSums' t [] rtns = [fst v, snd v] <> rtns
+    where v = qr $ fst t
+reduceSums' t (h:hs) rtns =
+    let v = fst t + snd h
         w = qr v
-    in (fst t + fst h, snd w) : ts
+    in reduceSums' (fst w + fst h, snd w) hs (snd w : rtns)
+
+formatAns :: [Int] -> [Int]
+formatAns (0:xs) = take 10 xs
+formatAns xs' = take 10 xs'
