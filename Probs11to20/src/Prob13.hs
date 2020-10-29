@@ -274,7 +274,7 @@ getSums m = reverse $ fmap (sumCol m) [1..(M.ncols m)]
 -- Couldn't quite gonkulate how to make it foldable.
 reduceSums' :: (Int, Int) -> [(Int, Int)] -> [Int] -> [Int]
 -- Base case.
--- Conceivably, t could run to more than 3 digits and
+-- Conceivably, t could run to more than 2 digits and
 -- `(fst . qr) t` would still be too many digits.
 reduceSums' t [] rtns = [fst v, snd v] <> rtns
     where v = (qr . fst) t
