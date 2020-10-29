@@ -264,18 +264,25 @@ sumCol :: M.Matrix Int -> Int -> (Int, Int)
 sumCol m i =
     qr $ sum $ M.getCol i m
 
+-- Reverse the list because the reduction
+-- runs from least significant to most significant.
 getSums :: M.Matrix Int -> [(Int, Int)]
 getSums m = reverse $ fmap (sumCol m) [1..(M.ncols m)]
 
--- Hand-rolled recursion to reduce a list of tuples.
---  Couldn't quite gonkulate how to make it foldable.
+-- Hand-rolled recursion to propagate carrys
+-- and accumulate place values.
+-- Couldn't quite gonkulate how to make it foldable.
 reduceSums' :: (Int, Int) -> [(Int, Int)] -> [Int] -> [Int]
+-- Base case.
+-- Conceivably, t could run to more than 3 digits and
+-- `(fst . qr) t` would still be too many digits.
 reduceSums' t [] rtns = [fst v, snd v] <> rtns
-    where v = qr $ fst t
+    where v = (qr . fst) t
 reduceSums' t (h:hs) rtns =
-    let v = fst t + snd h
-        w = qr v
-    in reduceSums' (fst w + fst h, snd w) hs (snd w : rtns)
+    let w = qr $ fst t + snd h
+        t' = (fst w + fst h, snd w)
+        rtns' = snd w : rtns
+    in reduceSums' t' hs rtns'
 
 -- Strip off a leading zero if present
 formatAns :: [Int] -> [Int]
