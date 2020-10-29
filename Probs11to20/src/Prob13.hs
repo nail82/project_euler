@@ -213,11 +213,14 @@ strDataGrid = [r|37107287533902102798797998220837590246510135740250
 53503534226472524250874054075591789781264330331690
 |]
 
+-- Some test data
+shorty :: String
 shorty = [r|366845
 941863
 132638
 |]
 
+longer :: String
 longer = [r|999999
 999999
 999999
@@ -232,9 +235,8 @@ longer = [r|999999
 
 run13 :: IO ()
 run13 = do
-  let ansStr = L.intercalate "" $ fmap show ans
   putStr "Problem 13 => "
-  putStrLn ansStr
+  putStrLn $ L.intercalate "" $ fmap show ans
 
 ans :: [Int]
 ans = formatAns $ reduceSums' (0,0) (getSums dataGrid) []
@@ -257,7 +259,7 @@ longerGrid = makeGrid 10 6 longer
 qr :: Integral a => a -> (a, a)
 qr = flip quotRem 10
 
-
+-- Return the sum of a column as a (tens, ones) tuple
 sumCol :: M.Matrix Int -> Int -> (Int, Int)
 sumCol m i =
     qr $ sum $ M.getCol i m
@@ -265,6 +267,8 @@ sumCol m i =
 getSums :: M.Matrix Int -> [(Int, Int)]
 getSums m = reverse $ fmap (sumCol m) [1..(M.ncols m)]
 
+-- Hand-rolled recursion to reduce a list of tuples.
+--  Couldn't quite gonkulate how to make it foldable.
 reduceSums' :: (Int, Int) -> [(Int, Int)] -> [Int] -> [Int]
 reduceSums' t [] rtns = [fst v, snd v] <> rtns
     where v = qr $ fst t
@@ -273,6 +277,7 @@ reduceSums' t (h:hs) rtns =
         w = qr v
     in reduceSums' (fst w + fst h, snd w) hs (snd w : rtns)
 
+-- Strip off a leading zero if present
 formatAns :: [Int] -> [Int]
 formatAns (0:xs) = take 10 xs
 formatAns xs' = take 10 xs'
