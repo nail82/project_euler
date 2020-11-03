@@ -12,3 +12,7 @@ collatz (x:xs) = let x' = case even x of
                             True -> x `div` 2
                             False -> 3 * x + 1
                  in collatz $ x' : x : xs
+
+collatzData :: [Int] -> [(Int, Int)]
+collatzData ns = fmap go ns
+    where go n = (n, length $ collatz [n])
