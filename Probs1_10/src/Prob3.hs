@@ -19,6 +19,7 @@ import Data.Vector.Unboxed ((!), (//))
 
 -- Sieving isn't going to work, bigOne is too big
 
+croot :: Double -> Int
 croot = ceiling . sqrt
 
 bigOne :: Int
@@ -59,7 +60,9 @@ singleFactor n =
     in go a n
         where
           go a' n' = case S.member b2 squares of
-                      True -> let rhs = F.double2Int $ (F.int2Double a') - (sqrt $ fromIntegral b2)
+                      True -> let rhs = F.double2Int
+                                        $ (F.int2Double a')
+                                        - (sqrt $ fromIntegral b2)
                               in (n' `div` rhs, rhs)
                       False -> go (a'+1) n'
               where b2 = a' ^ (2 :: Int) - n'
