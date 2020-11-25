@@ -1,8 +1,27 @@
-module Prob14
+module Prob14 where
+{--
     (
      run14
     )
     where
+--}
+
+import qualified Data.IntMap.Strict as M
+
+{-
+  Reading the approved solution, it is better to memoize collatz
+  vice computing each chain.
+
+  See here:  wiki.haskell.org/Memoization for some ideas.
+
+  Memoizing is trickier because collatz n+1 doesn't necessarily
+  mean we have already visited collatz n, n-1, .. 1.
+
+  Also, there are some heuristics that can be applied to speed
+  things along.  One is that collatz n = 1 + collatz n/2, when n is even.
+
+  Better just to compute the sum vice creating the whole chain.
+-}
 
 import System.IO
 import qualified Data.List as L
@@ -13,28 +32,32 @@ run14 = do
   putStrLn $ show ans14
 
 ans14 :: Int
-ans14 = let d = collatzData [1..999999]
-            m = foldr maxTup (0,0) d
-        in fst m
+ans14 = snd $ M.findMax $ makeCollatzMap [500000..999999] $ M.singleton 0 1
 
 
-maxTup :: (Int, Int) -> (Int, Int) -> (Int, Int)
-maxTup l r = if snd l >= snd r then l else r
+makeCollatzMap :: [Int] -> M.IntMap Int -> M.IntMap Int
+makeCollatzMap [] m = m
+makeCollatzMap (x:xs) m = let t = collatzTup x
+                              m' = M.insertWith max (fst t) (snd t) m
+                          in makeCollatzMap xs m'
 
-collatz :: Int -> [Int]
-collatz n = collatz' [n]
+collatzTup :: Int -> (Int, Int)
+collatzTup n = (collatz'' n, n)
 
-collatz' :: [Int] -> [Int]
-collatz' [] = []
-collatz' (1:xs) = reverse $ 1 : xs
-collatz' (x:xs) = let x' = case even x of
-                             True -> x `div` 2
-                             False -> 3 * x + 1
-                  in collatz' $ x' : x : xs
+invCollatzTup :: Int -> (Int, Int)
+invCollatzTup n = let t = collatzTup n
+                  in (snd t, fst t)
+
+collatz'' :: Int -> Int
+collatz'' 1 = 0
+collatz'' x = let x' = case even x of
+                         True -> x `div` 2
+                         False -> 3 * x + 1
+              in 1 + collatz'' x'
+
 
 collatzData :: [Int] -> [(Int, Int)]
-collatzData ns = fmap go ns
-    where go n = (n, length $ collatz n)
+collatzData = fmap invCollatzTup
 
 -- A function to take a look at the data
 writeData :: IO ()
