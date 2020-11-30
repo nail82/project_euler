@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: ceaf387b0c23a4667a1ab42084c655d891f1b3c91de5de6a566d5c8a80f44946
+-- hash: b5599290e73588e4c786c71d876c21cd699a52c8e271fa60f8a23a2a455ebcd9
 
 name:           Probs11to20
 version:        0.1.0.0
@@ -49,7 +49,9 @@ library
     , parallel
     , primitive
     , raw-strings-qq
+    , time
     , transformers
+    , trifecta
     , vector
   default-language: Haskell2010
 
@@ -69,7 +71,9 @@ executable Probs11to20-exe
     , parallel
     , primitive
     , raw-strings-qq
+    , time
     , transformers
+    , trifecta
     , vector
   default-language: Haskell2010
 
@@ -90,6 +94,8 @@ test-suite Probs11to20-test
     , parallel
     , primitive
     , raw-strings-qq
+    , time
     , transformers
+    , trifecta
     , vector
   default-language: Haskell2010

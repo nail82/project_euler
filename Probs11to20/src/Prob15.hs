@@ -8,6 +8,8 @@ module Prob15 where
   How many such routes are there through a 20×20 grid?
 -}
 
+import qualified Data.Vector.Unboxed as U
+
 run15 :: IO ()
 run15 = do
   putStr "Problem 15 => "

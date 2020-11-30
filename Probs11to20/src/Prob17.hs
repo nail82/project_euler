@@ -14,7 +14,47 @@ module Prob17 where
   numbers is in compliance with British usage.
 -}
 
+import Text.Trifecta
+
 run17 :: IO ()
 run17 = do
   putStr "Problem 17 => "
   putStrLn "not solved"
+
+data PlaceValue =
+    Zero
+    | One
+    | Two
+    | Three
+    | Four
+    | Five
+    | Six
+    | Seven
+    | Eight
+    | Nine
+    | Ten
+    | Eleven
+    | Twelve
+    | Thirteen
+    | Fourteen
+    | Fifteen
+    | Sixteen
+    | Seventeen
+    | Eighteen
+    | Nineteen
+    | Twenty
+    | Thirty
+    | Forty
+    | Fifty
+    | Sixty
+    | Seventy
+    | Eighty
+    | Ninety
+    | Hundred
+    deriving (Eq, Show)
+
+newtype Ones      = Ones PlaceValue deriving (Eq, Show)
+newtype Tens      = Tens PlaceValue deriving (Eq, Show)
+newtype Hundreds  = Hundreds PlaceValue deriving (Eq, Show)
+
+data MyNumber = MyNumber PlaceValue PlaceValue PlaceValue deriving (Eq, Show)
