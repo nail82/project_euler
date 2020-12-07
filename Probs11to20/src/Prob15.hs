@@ -25,4 +25,4 @@ See here: https://en.wikipedia.org/wiki/Self-avoiding_walk
 run15 :: IO ()
 run15 = do
   putStr "Problem 15 => "
-  putStrLn $ show $ (product [(21 :: Int)..40]) `div` (product [1..20])
+  putStrLn $ show $ (product [(21 :: Integer)..40]) `div` (product [1..20])
