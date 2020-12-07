@@ -7,10 +7,22 @@ module Prob15 where
 
   How many such routes are there through a 20×20 grid?
 -}
+{-
+  There is a closed form to this as a self-avoiding walk.  It's also
+  a binomial coefficient:
 
-import qualified Data.Vector.Unboxed as U
+(20+20)
+(  20 )
+
+The number of combinations (order doesn't matter) is n choose k.
+In this case, n = |R| + |D| and k = 20.  |R| is the number of moves
+we must make to the right (20) and |D| is the number of moves we
+have to make down (also 20).
+
+See here: https://en.wikipedia.org/wiki/Self-avoiding_walk
+-}
 
 run15 :: IO ()
 run15 = do
   putStr "Problem 15 => "
-  putStrLn "not solved"
+  putStrLn $ show $ (product [(21 :: Int)..40]) `div` (product [1..20])
