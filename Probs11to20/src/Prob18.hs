@@ -39,3 +39,29 @@ run18 :: IO ()
 run18 = do
   putStr "Problem 18 => "
   putStrLn "not solved"
+
+data Tree a = Leaf
+            | Node (Tree a) a (Tree a)
+              deriving (Eq, Show)
+
+reduceTree :: Tree Int -> Int
+reduceTree Leaf = 0
+reduceTree (Node left n right) = n + max (reduceTree left) (reduceTree right)
+
+base1 :: Tree Int
+base1 = Node Leaf 17 Leaf
+
+base2 :: Tree Int
+base2 = Node Leaf 47 Leaf
+
+base3 :: Tree Int
+base3 = Node Leaf 82 Leaf
+
+mid1 :: Tree Int
+mid1 = Node base1 95 base2
+
+mid2 :: Tree Int
+mid2 = Node base2 64 base3
+
+root :: Tree Int
+root = Node mid1 75 mid2
