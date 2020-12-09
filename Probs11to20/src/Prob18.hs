@@ -2,6 +2,9 @@
 module Prob18 where
 
 import Text.RawString.QQ
+import qualified Data.Matrix as M
+import Data.Matrix ((!))
+
 
 {-
   By starting at the top of the triangle below and moving to adjacent
@@ -35,10 +38,38 @@ import Text.RawString.QQ
 
 -}
 
+treeData :: String
+treeData = [r|75
+95 64
+17 47 82
+18 35 87 10
+20 04 82 47 65
+19 01 23 75 03 34
+88 02 77 73 07 63 67
+99 65 04 28 06 16 70 92
+41 41 26 56 83 40 80 70 33
+41 48 72 33 47 32 37 16 94 29
+53 71 44 65 25 43 91 52 97 51 14
+70 11 33 28 77 73 17 78 39 68 17 57
+91 71 52 38 17 14 91 43 58 50 27 29 48
+63 66 04 68 89 53 67 30 73 16 69 87 40 31
+04 62 98 27 23 09 70 98 73 93 38 53 60 04 23
+|]
+
+smallTree = [r|3
+7 4
+2 4 6
+8 5 9 3
+|]
+
 run18 :: IO ()
 run18 = do
   putStr "Problem 18 => "
-  putStrLn "not solved"
+  putStrLn $ show $ ans18
+
+ans18 :: Int
+ans18 = (reduceTree . makeTree) treeData
+
 
 data Tree a = Leaf
             | Node (Tree a) a (Tree a)
@@ -48,20 +79,34 @@ reduceTree :: Tree Int -> Int
 reduceTree Leaf = 0
 reduceTree (Node left n right) = n + max (reduceTree left) (reduceTree right)
 
-base1 :: Tree Int
-base1 = Node Leaf 17 Leaf
+countNodes :: Tree Int -> Int
+countNodes Leaf = 0
+countNodes (Node left _ right) = 1 + (countNodes left) + (countNodes right)
 
-base2 :: Tree Int
-base2 = Node Leaf 47 Leaf
 
-base3 :: Tree Int
-base3 = Node Leaf 82 Leaf
+makeTreeGrid :: String -> M.Matrix Int
+makeTreeGrid s =
+    let rs = lines s
+        cols = length rs
+        ms = fmap (padRow cols) rs
+    in M.fromLists ms
 
-mid1 :: Tree Int
-mid1 = Node base1 95 base2
+padRow :: Int -> String -> [Int]
+padRow cols s = let triCols = (fmap (\x -> read x :: Int) $ words s)
+                    pad = cols - (length triCols)
+                in triCols <> (take pad $ repeat 0)
 
-mid2 :: Tree Int
-mid2 = Node base2 64 base3
+makeTree :: String -> Tree Int
+makeTree s = let mat = makeTreeGrid s
+                 dim = M.nrows mat
+             in treeHelper dim (1,1) mat
 
-root :: Tree Int
-root = Node mid1 75 mid2
+-- Assumes a square matrix
+treeHelper :: Int -> (Int, Int) -> M.Matrix Int -> Tree Int
+treeHelper dim (rs,cs) mat =
+    case rs+1 > dim of
+      True -> Node Leaf (mat ! (rs,cs)) Leaf
+      False -> Node
+               (treeHelper dim (rs+1, cs) mat)
+               (mat ! (rs,cs))
+               (treeHelper dim (rs+1, cs+1) mat)
