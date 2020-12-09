@@ -4,7 +4,7 @@ module Prob18 where
 import Text.RawString.QQ
 import qualified Data.Matrix as M
 import Data.Matrix ((!))
-
+import System.IO
 
 {-
   By starting at the top of the triangle below and moving to adjacent
@@ -66,6 +66,7 @@ run18 :: IO ()
 run18 = do
   putStr "Problem 18 => "
   putStrLn $ show $ ans18
+  ans67
 
 ans18 :: Int
 ans18 = (reduceTree . makeTree) treeData
@@ -110,3 +111,32 @@ treeHelper dim (rs,cs) mat =
                (treeHelper dim (rs+1, cs) mat)
                (mat ! (rs,cs))
                (treeHelper dim (rs+1, cs+1) mat)
+
+-- Recursive solution no workie for 67.  Going to need to do via dynamic programming.
+fnm :: String
+fnm = "/Users/tsatcher/Downloads/p067_triangle.txt"
+
+ans67 :: IO ()
+ans67 = do
+  putStr "Problem 67 => "
+  fh <- openFile fnm ReadMode
+  strdata <- hGetContents fh
+  let t = makeTree strdata
+      ans = reduceTree t
+  putStrLn $ show ans
+
+reduceTreeDP :: M.Matrix Int -> M.Matrix Int
+reduceTreeDP mat =
+    let rows = reverse [1..(M.nrows mat - 1)]
+    in foldr reduceRow mat rows
+
+reduceRow :: Int -> M.Matrix Int -> M.Matrix Int
+reduceRow row mat =
+    let tups = (\x -> (row,x)) <$> [1..row]
+    in foldr reduceElem mat tups
+
+reduceElem :: (Int, Int) -> M.Matrix Int -> M.Matrix Int
+reduceElem (row, col) mat =
+    let v = max (mat ! (row+1, col)) (mat ! (row+1, col+1))
+        w = mat ! (row, col)
+    in M.setElem (v+w) (row, col) mat
