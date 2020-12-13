@@ -3,8 +3,10 @@ module Prob18 where
 
 import Text.RawString.QQ
 import qualified Data.Matrix as M
+import qualified Data.Vector as V
 import Data.Matrix ((!))
 import System.IO
+import Control.Monad.State
 
 {-
   By starting at the top of the triangle below and moving to adjacent
@@ -112,7 +114,8 @@ treeHelper dim (rs,cs) mat =
                (mat ! (rs,cs))
                (treeHelper dim (rs+1, cs+1) mat)
 
--- Recursive solution no workie for 67.  Going to need to do via dynamic programming.
+-- Recursive solution no workie for 67.
+-- Here's a dynamic programming solution.
 fnm :: String
 fnm = "/Users/tsatcher/Downloads/p067_triangle.txt"
 
@@ -121,19 +124,31 @@ ans67 = do
   putStr "Problem 67 => "
   fh <- openFile fnm ReadMode
   strdata <- hGetContents fh
-  let t = makeTree strdata
-      ans = reduceTree t
-  putStrLn $ show ans
+  let tg = makeTreeGrid strdata
+      jn = reduceTreeDP tg
+  case jn of
+    Just n -> putStrLn $ show n
+    Nothing -> putStrLn "something broke"
 
-reduceTreeDP :: M.Matrix Int -> M.Matrix Int
-reduceTreeDP mat =
-    let rows = reverse [1..(M.nrows mat - 1)]
-    in foldr reduceRow mat rows
+reduceTreeDP :: M.Matrix Int -> Maybe Int
+reduceTreeDP mat = do
+    let rows = M.nrows mat - 1
+        jvecs = evalStateT (matrixReduce rows) (rows, mat)
+    case jvecs of
+      Just vecs -> case vecs of
+                     [] -> Nothing
+                     vs -> Just $ (last vs) V.! 0
+      Nothing -> Nothing
 
-reduceRow :: Int -> M.Matrix Int -> M.Matrix Int
-reduceRow row mat =
+matrixReduce :: Int -> StateT (Int, M.Matrix Int) Maybe [V.Vector Int]
+matrixReduce n = do
+  replicateM n (StateT $ \t -> reduceRow' t)
+
+reduceRow' :: (Int, M.Matrix Int) -> Maybe (V.Vector Int, (Int, M.Matrix Int))
+reduceRow' (row, mat) =
     let tups = (\x -> (row,x)) <$> [1..row]
-    in foldr reduceElem mat tups
+        mat' = foldr reduceElem mat tups
+    in Just (M.getRow row mat', (row-1, mat'))
 
 reduceElem :: (Int, Int) -> M.Matrix Int -> M.Matrix Int
 reduceElem (row, col) mat =
