@@ -1,10 +1,8 @@
-module Prob14 where
-{--
+module Prob14
     (
      run14
     )
     where
---}
 
 import qualified Data.IntMap.Strict as M
 

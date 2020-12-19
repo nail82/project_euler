@@ -1,4 +1,8 @@
-module Prob17 where
+module Prob17
+    (
+     run17
+    )
+    where
 
 {-
   If the numbers 1 to 5 are written out in words: one, two, three, four,

@@ -1,4 +1,8 @@
-module Prob12 where
+module Prob12
+    (
+     run12
+    )
+    where
 
 import qualified Data.List as L
 import qualified GHC.Float as F

@@ -1,5 +1,9 @@
 {-# LANGUAGE QuasiQuotes #-}
-module Prob13 where
+module Prob13
+    (
+     run13
+    )
+    where
 
 import Text.RawString.QQ
 import qualified Data.Matrix as M

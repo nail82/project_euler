@@ -1,4 +1,8 @@
-module Prob19 where
+module Prob19
+    (
+     run19
+    )
+    where
 {-
   You are given the following information, but you may prefer to do some
   research for yourself.

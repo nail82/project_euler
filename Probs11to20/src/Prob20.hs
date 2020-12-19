@@ -1,4 +1,8 @@
-module Prob20 where
+module Prob20
+    (
+     run20
+    )
+    where
 
 {-
   n! means n × (n − 1) × ... × 3 × 2 × 1
