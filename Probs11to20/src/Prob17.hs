@@ -14,10 +14,15 @@ module Prob17 where
   numbers is in compliance with British usage.
 -}
 
+import qualified Data.List as L
+
 run17 :: IO ()
 run17 = do
   putStr "Problem 17 => "
-  putStrLn "not solved"
+  putStrLn $ show ans17
+
+ans17 :: Int
+ans17 = length $ L.intercalate "" $ "onethousand" : fmap (show . buildMyNumber) [1..999]
 
 data MyNumber = MyNumber Hundreds Tens Ones deriving (Eq)
 
