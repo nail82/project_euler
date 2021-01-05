@@ -13,7 +13,26 @@ module Prob21 where
   Evaluate the sum of all the amicable numbers under 10000.
 -}
 
+import qualified Data.List as L
+
 run21 :: IO ()
 run21 = do
   putStr "Problem 21 => "
   putStrLn "unsolved"
+
+croot :: Int -> Int
+croot = ceiling . sqrt . fromIntegral
+
+
+checkDivisor :: Int -> Int -> (Int, Int)
+checkDivisor n d = let t = n `divMod` d
+                   in case snd t of
+                        0 -> (d,fst t)
+                        _ -> (d, -1)
+
+properDivisors :: Int -> [Int]
+properDivisors n = let rhs = croot n
+                       ds = [2..rhs]
+                       ts = fmap (checkDivisor n) ds
+                       ws = filter (\t -> snd t /= (-1)) ts
+                   in L.concat $ [1] : fmap (\t -> [fst t, snd t]) ws
