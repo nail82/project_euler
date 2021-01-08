@@ -36,3 +36,15 @@ properDivisors n = let rhs = croot n
                        ts = fmap (checkDivisor n) ds
                        ws = filter (\t -> snd t /= (-1)) ts
                    in L.concat $ [1] : fmap (\t -> [fst t, snd t]) ws
+
+d :: Int -> (Int, Int)
+d n = (n, (sum . L.nub . properDivisors) n)
+
+amicableAlist = fmap d [1..1000]
+
+checkPair :: Int -> Bool
+checkPair n = let ji = lookup n amicableAlist
+                  rhs = case ji of
+                          Just m -> lookup m amicableAlist
+                          Nothing -> Nothing
+              in (Just n) == rhs
