@@ -14,11 +14,18 @@ module Prob21 where
 -}
 
 import qualified Data.List as L
+import Control.Monad.Zip (mzip)
 
 run21 :: IO ()
-run21 = do
-  putStr "Problem 21 => "
-  putStrLn "unsolved"
+run21 = let (Just s) = ans21
+        in do
+          putStr "Problem 21 => "
+          putStrLn $ show s
+
+ans21 :: Maybe Int
+ans21 = let all_pairs = sequence $ L.nub $ filter (\t -> t /= Nothing) $ fmap aGoodPair [1..10000]
+            xs = (fmap . fmap) (\t -> (fst t) + (snd t)) all_pairs
+        in fmap sum xs
 
 croot :: Int -> Int
 croot = ceiling . sqrt . fromIntegral
@@ -37,14 +44,28 @@ properDivisors n = let rhs = croot n
                        ws = filter (\t -> snd t /= (-1)) ts
                    in L.concat $ [1] : fmap (\t -> [fst t, snd t]) ws
 
-d :: Int -> (Int, Int)
-d n = (n, (sum . L.nub . properDivisors) n)
+pdvs :: Int -> (Int, Int)
+pdvs n = (n, (sum . L.nub . properDivisors) n)
 
-amicableAlist = fmap d [1..1000]
+divisorSumList :: [(Int, Int)]
+divisorSumList = fmap pdvs [1..10000]
 
-checkPair :: Int -> Bool
-checkPair n = let ji = lookup n amicableAlist
-                  rhs = case ji of
-                          Just m -> lookup m amicableAlist
-                          Nothing -> Nothing
-              in (Just n) == rhs
+luf :: Maybe Int -> Maybe Int
+luf Nothing = Nothing
+luf (Just n) = lookup n divisorSumList
+
+
+
+checkPair' :: Int -> Maybe (Int, Int)
+checkPair' n = let just_n     = Just n
+                   transitive = just_n == (luf . luf) just_n
+                   just_m     = luf just_n
+                   not_same   = just_n /= just_m
+               in if (transitive && not_same) then mzip just_n just_m else Nothing
+
+sortPair :: Maybe (Int, Int) -> Maybe (Int, Int)
+sortPair Nothing = Nothing
+sortPair (Just (m,n)) = if m < n then Just (m,n) else Just (n,m)
+
+aGoodPair :: Int -> Maybe (Int, Int)
+aGoodPair = sortPair . checkPair'
