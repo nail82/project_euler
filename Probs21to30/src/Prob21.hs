@@ -15,6 +15,7 @@ module Prob21 where
 
 import qualified Data.List as L
 import Control.Monad.Zip (mzip)
+import qualified GHC.Float as F
 
 run21 :: IO ()
 run21 = let (Just s) = ans21
@@ -28,7 +29,7 @@ ans21 = let all_pairs = sequence $ L.nub $ filter (\t -> t /= Nothing) $ fmap aG
         in fmap sum xs
 
 croot :: Int -> Int
-croot = ceiling . sqrt . fromIntegral
+croot = ceiling . sqrt . F.int2Double
 
 
 checkDivisor :: Int -> Int -> (Int, Int)
