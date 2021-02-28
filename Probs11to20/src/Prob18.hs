@@ -8,6 +8,7 @@ module Prob18
 import Text.RawString.QQ
 import qualified Data.Matrix as M
 import qualified Data.Vector as V
+import qualified System.Directory as SD
 import Data.Matrix ((!))
 import System.IO
 import Control.Monad.State
@@ -121,12 +122,13 @@ treeHelper dim (rs,cs) mat =
 -- Recursive solution no workie for 67.
 -- Here's a dynamic programming solution.
 fnm :: String
-fnm = "/Users/tsatcher/Downloads/p067_triangle.txt"
+fnm = "../resources/p067_triangle.txt"
 
 ans67 :: IO ()
 ans67 = do
   putStr "Problem 67 => "
-  fh <- openFile fnm ReadMode
+  abs_fnm <- SD.makeAbsolute fnm
+  fh <- openFile abs_fnm ReadMode
   strdata <- hGetContents fh
   let tg = makeTreeGrid strdata
       jn = reduceTreeDP tg
