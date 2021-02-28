@@ -1,4 +1,7 @@
-module Prob21 where
+module Prob21
+    (
+     run21
+    ) where
 
 {-
   Let d(n) be defined as the sum of proper divisors of n (numbers less
