@@ -19,17 +19,18 @@ module Prob21
 import qualified Data.List as L
 import Control.Monad.Zip (mzip)
 import qualified GHC.Float as F
+import Data.Maybe
 
 run21 :: IO ()
-run21 = let (Just s) = ans21
+run21 = let s = ans21
         in do
           putStr "Problem 21 => "
           putStrLn $ show s
 
-ans21 :: Maybe Int
-ans21 = let all_pairs = sequence $ L.nub $ filter (\t -> t /= Nothing) $ fmap aGoodPair [1..10000]
-            xs = (fmap . fmap) (\t -> (fst t) + (snd t)) all_pairs
-        in fmap sum xs
+ans21 :: Int
+ans21 = let all_pairs = L.nub $ catMaybes $ fmap aGoodPair [1..10000]
+            xs = fmap (\t -> (fst t) + (snd t)) all_pairs
+        in sum xs
 
 croot :: Int -> Int
 croot = ceiling . sqrt . F.int2Double
