@@ -21,6 +21,10 @@ description:         Please see the README on GitHub at <https://github.com/nail
 
 dependencies:
 - base >= 4.7 && < 5
+- directory
+- bytestring
+- trifecta >= 2
+- raw-strings-qq
 
 library:
   source-dirs: src
@@ -35,6 +39,9 @@ executables:
     - -with-rtsopts=-N
     dependencies:
     - Probs21to30
+    when:
+    - condition: false
+      other-modules: Paths_Probs21to30
 
 tests:
   Probs21to30-test:
