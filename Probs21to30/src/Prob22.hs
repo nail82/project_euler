@@ -51,6 +51,7 @@ ans22 names =
 fakeNames :: String
 fakeNames = [r|"JOE","BUB","JOHN"|]
 
+-- Take the input string apart by hand.  Just because.
 readName :: (String, String) -> (String, String)
 readName (name, "") = (reverse name, "")
 readName (name,s:ss)
