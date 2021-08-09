@@ -1,6 +1,7 @@
 module Prob21
     (
      run21
+     ,properDivisors
     ) where
 
 {-
@@ -43,6 +44,7 @@ checkDivisor n d = let t = n `divMod` d
                         _ -> (d, -1)
 
 properDivisors :: Int -> [Int]
+properDivisors 2 = [1]
 properDivisors n = let rhs = croot n
                        ds = [2..rhs]
                        ts = fmap (checkDivisor n) ds
