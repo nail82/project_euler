@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 734bd4a7b05a4e64db8de0b1571813350ca62ee4eef6cf6d63eb38ea6a3ce2b0
+-- hash: 045f7b5ed2ff3fb9b702eb76f8e3b80066c36186958961fe643ab63b420b2baf
 
 name:           Probs21to30
 version:        0.1.0.0
@@ -44,6 +44,7 @@ library
   build-depends:
       base >=4.7 && <5
     , bytestring
+    , containers
     , directory
     , raw-strings-qq
     , trifecta >=2
@@ -58,6 +59,7 @@ executable Probs21to30-exe
       Probs21to30
     , base >=4.7 && <5
     , bytestring
+    , containers
     , directory
     , raw-strings-qq
     , trifecta >=2
@@ -75,6 +77,7 @@ test-suite Probs21to30-test
       Probs21to30
     , base >=4.7 && <5
     , bytestring
+    , containers
     , directory
     , raw-strings-qq
     , trifecta >=2

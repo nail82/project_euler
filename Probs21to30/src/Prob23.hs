@@ -28,11 +28,17 @@ the sum of two abundant numbers.
 
 import Prob21
 import qualified Data.List as L
+import qualified Data.Set as S
 
 run23 :: IO ()
 run23 = do
   putStr "Problem 23 => "
-  putStrLn "unsolved"
+  putStrLn $ show ans23
+
+ans23 =
+    let notsums = filter (\n -> not $ isaSum n) searchSpace
+    -- Don't forget about [1..23]
+    in sum $ [1..23] <> notsums
 
 
 isAbundant n =
@@ -40,3 +46,13 @@ isAbundant n =
     in sum_div > n
 
 abundants = filter isAbundant [12..28123]
+abundantSet = S.fromList abundants
+
+
+searchSpace :: [Int]
+searchSpace = [25..28122]
+
+isaSum n =
+    let lessThanN = filter (\a -> a < n) abundants
+        deltas = fmap ((-) n) lessThanN
+    in L.any (\n' -> S.member n' abundantSet) deltas

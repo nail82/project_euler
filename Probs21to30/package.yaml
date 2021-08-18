@@ -25,6 +25,7 @@ dependencies:
 - bytestring
 - trifecta >= 2
 - raw-strings-qq
+- containers
 
 library:
   source-dirs: src
