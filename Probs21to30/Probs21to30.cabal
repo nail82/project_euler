@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 6555ce5b0961a740d4515b59f4faa2be577803b39984f36a5e0addff50236e59
+-- hash: dd35704dda30985a405c0aea98f9bbce8aa9f2aae05a00ff383ae64681840c4a
 
 name:           Probs21to30
 version:        0.1.0.0
@@ -47,9 +47,8 @@ library
     , containers
     , directory
     , raw-strings-qq
-    , text >=1.2
-    , text-format >=0.3.1
     , trifecta >=2
+    , vector >=0.12
   default-language: Haskell2010
 
 executable Probs21to30-exe
@@ -64,9 +63,8 @@ executable Probs21to30-exe
     , containers
     , directory
     , raw-strings-qq
-    , text >=1.2
-    , text-format >=0.3.1
     , trifecta >=2
+    , vector >=0.12
   default-language: Haskell2010
 
 test-suite Probs21to30-test
@@ -84,7 +82,6 @@ test-suite Probs21to30-test
     , containers
     , directory
     , raw-strings-qq
-    , text >=1.2
-    , text-format >=0.3.1
     , trifecta >=2
+    , vector >=0.12
   default-language: Haskell2010
