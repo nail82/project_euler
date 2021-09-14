@@ -24,24 +24,48 @@ What is the index of the first term in the Fibonacci sequence to contain 1000 di
 --}
 
 import qualified Data.Vector as V
-import Data.Vector ((!))
 
+divMod10 :: (Integral a) => a -> (a,a)
 divMod10 = flip divMod 10
 
-addTups :: V.Vector (Int,Int) -> Int -> V.Vector Int -> V.Vector Int
+-- Recursively add a vector of tuples representing two big integers.
+-- Note: Most significant digit is in the zeroth postition (big endian).
+addTups :: (Integral a) => V.Vector (a,a) -> a -> V.Vector a -> V.Vector a
 addTups ts c res
     | V.null ts =
       if c == 0 then res else V.cons c res
     | otherwise =
-        let (t,ts') = (V.head ts, V.tail ts)
+        let (t,ts') = (V.last ts, V.init ts)
             (carry,placeValue) = divMod10 $ (fst t) + (snd t) + c
-        in addTups ts' carry (V.cons placeValue res)
+            res' = V.cons placeValue res
+        in addTups ts' carry res'
 
+-- Use addTups to add two big integers.
+bigNumberAdder :: (Integral a) => V.Vector a -> V.Vector a -> V.Vector a
+bigNumberAdder lhs rhs =
+    -- length rhs will always be >= length lhs, since fibonacci is monotonic
+    let pad = V.replicate (V.length rhs - V.length lhs) 0
+        lhs' = pad <> lhs
+        zipped = V.zip lhs' rhs
+    in addTups zipped 0 V.empty
 
-bigNumberAdder :: (Num a) => V.Vector a -> V.Vector a -> V.Vector a
-bigNumberAdder = undefined
+-- Search for a fibonacci of a certain length.
+findFibOfLenN :: Int -> (Int, V.Vector Int)
+findFibOfLenN n =
+    let go k i lhs rhs =
+
+            let rhs' = bigNumberAdder lhs rhs
+                i' = i + 1
+            in if V.length rhs' >= n then (i',rhs') else go k i' rhs rhs'
+
+    in go n 2 (V.fromList [1]) (V.fromList [1])
+
+ans25 :: String
+ans25 =
+    let (ans,_) = findFibOfLenN 1000
+    in show ans
 
 run25 :: IO ()
 run25 = do
   putStr "Problem 25 => "
-  putStrLn "unsolved"
+  putStrLn ans25
