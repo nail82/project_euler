@@ -103,14 +103,14 @@ swapEm v (i1,i2) =
 -- Find j
 step1 :: (Ord a) => V.Vector a -> (Int, V.Vector a)
 step1 v =
-    let n = (V.length v) - 1
+    let n = V.length v - 1
         go 0 = 0
         go j'
             | (v ! j') < (v ! (j'+1)) = j'
             | otherwise = go (j'-1)
 
-        j' = go (n-1)
-    in (j',v)
+        j = go (n-1)
+    in (j,v)
 
 -- Find l, swap a_j & a_l
 step2 :: (Ord a) => (Int, V.Vector a) -> (Int, V.Vector a)
@@ -121,7 +121,7 @@ step2 (j,v) =
            | (v ! j) < (v ! l) = l
            | otherwise = go (l-1)
 
-        l' = go $ (V.length v) - 1
+        l' = go $ V.length v - 1
         v' = swapEm v (j,l')
 
     in (j,v')
@@ -141,10 +141,10 @@ step3 (j,v) =
                     l' = l-1
                 in go v'' k' l'
 
-    in go v (j+1) ((V.length v) - 1)
+    in go v (j+1) (V.length v - 1)
 
 oneIteration :: (Ord a) => V.Vector a -> V.Vector a
-oneIteration = (step3 . step2 . step1)
+oneIteration = step3 . step2 . step1
 
 nPermutations :: (Ord a) => Int -> V.Vector a -> V.Vector a
 nPermutations n v =
