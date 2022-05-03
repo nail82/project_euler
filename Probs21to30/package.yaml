@@ -27,6 +27,9 @@ dependencies:
 - raw-strings-qq
 - containers
 - vector >= 0.12
+- lens >= 4.17
+- mtl
+- transformers
 
 library:
   source-dirs: src

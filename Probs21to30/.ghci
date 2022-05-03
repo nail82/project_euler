@@ -1,0 +1,5 @@
+:set prompt "> "
+:set -XNumericUnderscores
+import Data.Vector as V
+import Data.Vector ((//), (!))
+import Data.List as L

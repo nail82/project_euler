@@ -14,8 +14,7 @@ What is the millionth lexicographic permutation of the digits 0, 1, 2,
 
 import qualified Data.List as L
 import qualified Data.Vector as V
-import Data.Vector ((//))
-import Data.Vector ((!))
+import Data.Vector ((//), (!))
 
 -- Recursive solution
 -- Insert an element at the ends and between elements of a list
@@ -50,6 +49,9 @@ ans24 =
         perms = permuteList xs
         ans = snd $ head $ L.dropWhile (\t -> fst t < 1_000_000) (zip [1..n] perms)
      in showAns ans
+
+
+
 -- End recursive solution
 
 -- Linear solution
@@ -57,7 +59,7 @@ ans24 =
 
 Here is a linear solution from Knuth.
 Assumes a sorted list `a' with n sorted elements indexed from 1 to n.
-Also assumes an element and index 0 that is strictly less than a_n.
+Also assumes an element at index 0 that is strictly less than a_n.
 This will produce permutations in lexicographic order.
 
 -- step 1
@@ -102,14 +104,12 @@ swapEm v (i1,i2) =
 step1 :: (Ord a) => V.Vector a -> (Int, V.Vector a)
 step1 v =
     let n = (V.length v) - 1
-
         go 0 = 0
-        go j
-            | (v ! j) < (v ! (j+1)) = j
-            | otherwise = go (j-1)
+        go j'
+            | (v ! j') < (v ! (j'+1)) = j'
+            | otherwise = go (j'-1)
 
         j' = go (n-1)
-
     in (j',v)
 
 -- Find l, swap a_j & a_l
@@ -161,7 +161,6 @@ ans24' =
     in showAns $ V.tail v'
 
 -- Linear solution is a 2x speed up.
-
 -- End linear solution
 
 run24 :: IO ()
