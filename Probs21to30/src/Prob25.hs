@@ -36,7 +36,7 @@ addTups ts c res
       if c == 0 then res else V.cons c res
     | otherwise =
         let (t,ts') = (V.last ts, V.init ts)
-            (carry,placeValue) = divMod10 $ (fst t) + (snd t) + c
+            (carry,placeValue) = divMod10 $ uncurry (+) t + c
             res' = V.cons placeValue res
         in addTups ts' carry res'
 
