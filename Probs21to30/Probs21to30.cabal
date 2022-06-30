@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 79b068108209195a79f6162084e0a0e5743f0e795ec2ca6411ddfa5842c30380
+-- hash: c314b6d82f035c294f94d3ffef3b46457d5293fc622ca50f921a6c2e5b9a916f
 
 name:           Probs21to30
 version:        0.1.0.0
@@ -27,7 +27,6 @@ source-repository head
 
 library
   exposed-modules:
-      LensTut
       Prob21
       Prob22
       Prob23
