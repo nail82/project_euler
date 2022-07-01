@@ -26,7 +26,7 @@ run21 :: IO ()
 run21 = let s = ans21
         in do
           putStr "Problem 21 => "
-          putStrLn $ show s
+          print s
 
 ans21 :: Int
 ans21 = let all_pairs = L.nub $ catMaybes $ fmap aGoodPair [1..10000]

@@ -1,9 +1,10 @@
 {-# LANGUAGE QuasiQuotes #-}
-module Prob22
+module Prob22 where
+{--
     (
      run22
     ) where
-
+--}
 {--
 
 Using names.txt a text file containing over five-thousand first names,
@@ -33,7 +34,7 @@ run22 = do
   let names = splitInput' strdata
   let ans = ans22 names
   putStr "Problem 22 => "
-  putStrLn $ show ans
+  print ans
 
 {-- Monad sequencing finally makes sense.
 run22' :: IO ()
@@ -43,7 +44,10 @@ run22' = SD.makeAbsolute "../resources/p022_names.txt"
          >>= putStrLn
 --}
 
-foldNames (nm,idx) z = z + (wordVal nm) * idx
+foldNames :: (String, Int) -> Int -> Int
+foldNames (nm,idx) z = z + wordVal nm * idx
+
+ans22 :: [String] -> Int
 ans22 names =
     let zipped = zip names [1..(length names)]
     in foldr foldNames 0 zipped
@@ -66,9 +70,14 @@ splitInput names ss =
     in splitInput (nm:names) ss'
 
 splitInput' :: String -> [String]
-splitInput' input = splitInput [] input
+splitInput' = splitInput []
 
 
-bigAOffset = (ord 'A') - 1
-letterVal c = (ord c) - bigAOffset
-wordVal w = foldr (\c z -> letterVal c + z) 0 w
+bigAOffset :: Int
+bigAOffset = ord 'A' - 1
+
+letterVal :: Char -> Int
+letterVal c = ord c - bigAOffset
+
+wordVal :: String -> Int
+wordVal = foldr (\c z -> letterVal c + z) 0
