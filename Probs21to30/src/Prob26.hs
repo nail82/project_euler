@@ -26,6 +26,7 @@ Notes:
 
 import qualified Data.Vector as V
 import qualified Data.Set as S
+import qualified Data.List as L
 
 computeOnePlace :: Integer -> Integer -> (Integer, Integer)
 computeOnePlace d n =
@@ -34,33 +35,47 @@ computeOnePlace d n =
         rhs =  place * d
     in (n' - rhs, place)
 
-go :: S.Set Integer
+oneHelper :: S.Set Integer
    -> V.Vector Integer
    -> (Integer -> (Integer, Integer))
    -> Integer
    -> V.Vector Integer
-go ns places f n =
+oneHelper ns places f n =
     let (n',place) = f n
         g q
             | q `S.member` ns = places
             | q == 0 = places `V.snoc` place
             | otherwise = let ns' = S.insert q ns
                               places' = places `V.snoc` place
-                          in go ns' places' f q
+                          in oneHelper ns' places' f q
     in g n'
 
 
-findRepeating :: Integer -> V.Vector Integer
-findRepeating d =
-    let places = go S.empty V.empty (computeOnePlace d) 1
+oneOver :: Integer -> V.Vector Integer
+oneOver d =
+    let places = oneHelper S.empty V.empty (computeOnePlace d) 1
         trimmed = V.dropWhile (== 0) places
     in if V.length places == V.length trimmed then
            places
        else
            trimmed `V.snoc` 0
 
+foldOne :: Integer -> (Integer, Integer) -> (Integer, Integer)
+foldOne n' (p,m) =
+    let m' = fromIntegral $ V.length $ oneOver n'
+    in if m' > m then
+           (n',m')
+       else
+           (p,m)
+
+
+ans :: Integer
+ans =
+    let (n,_) = L.foldr foldOne (1,0) [2..999]
+    in n
+
 
 run26 :: IO ()
 run26 = do
   putStr "Problem 26 => "
-  putStrLn "unsolved"
+  print ans
