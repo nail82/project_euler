@@ -22,11 +22,43 @@ Notes:
 - How to know when you've hit a cycle...seems kind of like a directed
   graph problem.
 
-- Any better way to compute besides divModding?
-
-- What's an upper bound for the length of repeats?
-
 --}
+
+import qualified Data.Vector as V
+import qualified Data.Set as S
+
+computeOnePlace :: Integer -> Integer -> (Integer, Integer)
+computeOnePlace d n =
+    let n' = n * 10
+        place = (n' `div` d)
+        rhs =  place * d
+    in (n' - rhs, place)
+
+go :: S.Set Integer
+   -> V.Vector Integer
+   -> (Integer -> (Integer, Integer))
+   -> Integer
+   -> V.Vector Integer
+go ns places f n =
+    let (n',place) = f n
+        g q
+            | q `S.member` ns = places
+            | q == 0 = places `V.snoc` place
+            | otherwise = let ns' = S.insert q ns
+                              places' = places `V.snoc` place
+                          in go ns' places' f q
+    in g n'
+
+
+findRepeating :: Integer -> V.Vector Integer
+findRepeating d =
+    let places = go S.empty V.empty (computeOnePlace d) 1
+        trimmed = V.dropWhile (== 0) places
+    in if V.length places == V.length trimmed then
+           places
+       else
+           trimmed `V.snoc` 0
+
 
 run26 :: IO ()
 run26 = do
