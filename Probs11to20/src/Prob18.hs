@@ -1,4 +1,5 @@
 {-# LANGUAGE QuasiQuotes #-}
+{-# LANGUAGE TupleSections #-}
 module Prob18
     (
      run18
@@ -11,6 +12,7 @@ import qualified Data.Vector as V
 import qualified System.Directory as SD
 import Data.Matrix ((!))
 import System.IO
+import Control.Monad.Identity
 import Control.Monad.State
 
 {-
@@ -72,7 +74,7 @@ smallTree = [r|3
 run18 :: IO ()
 run18 = do
   putStr "Problem 18 => "
-  putStrLn $ show $ ans18
+  print ans18
   ans67
 
 ans18 :: Int
@@ -87,10 +89,6 @@ reduceTree :: Tree Int -> Int
 reduceTree Leaf = 0
 reduceTree (Node left n right) = n + max (reduceTree left) (reduceTree right)
 
-countNodes :: Tree Int -> Int
-countNodes Leaf = 0
-countNodes (Node left _ right) = 1 + (countNodes left) + (countNodes right)
-
 
 makeTreeGrid :: String -> M.Matrix Int
 makeTreeGrid s =
@@ -100,9 +98,9 @@ makeTreeGrid s =
     in M.fromLists ms
 
 padRow :: Int -> String -> [Int]
-padRow cols s = let triCols = (fmap (\x -> read x :: Int) $ words s)
-                    pad = cols - (length triCols)
-                in triCols <> (take pad $ repeat 0)
+padRow cols s = let triCols = (\x -> read x :: Int) <$> words s
+                    pad = cols - length triCols
+                in triCols <> replicate pad 0
 
 makeTree :: String -> Tree Int
 makeTree s = let mat = makeTreeGrid s
@@ -133,28 +131,27 @@ ans67 = do
   let tg = makeTreeGrid strdata
       jn = reduceTreeDP tg
   case jn of
-    Just n -> putStrLn $ show n
-    Nothing -> putStrLn "something broke"
+      (Just n) ->  print n
+      Nothing -> putStrLn "something broke"
+
 
 reduceTreeDP :: M.Matrix Int -> Maybe Int
 reduceTreeDP mat = do
     let rows = M.nrows mat - 1
-        jvecs = evalStateT (matrixReduce rows) (rows, mat)
+        (Identity jvecs) = evalStateT (matrixReduce rows) (rows, mat)
     case jvecs of
-      Just vecs -> case vecs of
-                     [] -> Nothing
-                     vs -> Just $ (last vs) V.! 0
-      Nothing -> Nothing
+      [] -> Nothing
+      vs -> Just $ last vs V.! 0
 
-matrixReduce :: Int -> StateT (Int, M.Matrix Int) Maybe [V.Vector Int]
+matrixReduce :: Int -> StateT (Int, M.Matrix Int) Identity [V.Vector Int]
 matrixReduce n = do
   replicateM n (StateT $ \t -> reduceRow' t)
 
-reduceRow' :: (Int, M.Matrix Int) -> Maybe (V.Vector Int, (Int, M.Matrix Int))
+reduceRow' :: (Int, M.Matrix Int) -> Identity (V.Vector Int, (Int, M.Matrix Int))
 reduceRow' (row, mat) =
-    let tups = (\x -> (row,x)) <$> [1..row]
+    let tups = (row,) <$> [1..row]
         mat' = foldr reduceElem mat tups
-    in Just (M.getRow row mat', (row-1, mat'))
+    in Identity (M.getRow row mat', (row-1, mat'))
 
 reduceElem :: (Int, Int) -> M.Matrix Int -> M.Matrix Int
 reduceElem (row, col) mat =
