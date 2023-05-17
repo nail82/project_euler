@@ -28,37 +28,40 @@ import qualified Data.Vector as V
 import qualified Data.Set as S
 import qualified Data.List as L
 
-computeOnePlace :: Integer -> Integer -> (Integer, Integer)
-computeOnePlace d n =
-    let n' = n * 10
-        place = (n' `div` d)
-        rhs =  place * d
-    in (n' - rhs, place)
+-- Normal divModding, but multiply the numerator by 10
+myDivMod n d =
+    let (place,r) = (n*10) `divMod` d
+    in (place,r)
 
-oneHelper :: S.Set Integer
-   -> V.Vector Integer
+-- Remainder repetition flags the start of another cycle
+remTracker :: (S.Set Integer, V.Vector Integer)
    -> (Integer -> (Integer, Integer))
    -> Integer
-   -> V.Vector Integer
-oneHelper ns places f n =
-    let (n',place) = f n
-        g q
-            | q `S.member` ns = places
-            | q == 0 = places `V.snoc` place
-            | otherwise = let ns' = S.insert q ns
-                              places' = places `V.snoc` place
-                          in oneHelper ns' places' f q
-    in g n'
+   -> (S.Set Integer, V.Vector Integer)
+remTracker (rems, places) dm n
+    -- Hit a repeat remainder, so we're done
+    | r `S.member` rems = (rems, places)
+    -- When remainder is zero, this isn't a repeating reciprocal
+    | r == 0 = (rems, places `V.snoc` place)
+    -- Otherwise update remainders and places and recurse
+    | otherwise = let rems' = S.insert r rems
+                      places' = places `V.snoc` place
+                  in remTracker (rems', places') dm r
+       where (place,r) = dm n
 
 
+-- Reciprocal computation. Place values returned
+-- as an array of integers
 oneOver :: Integer -> V.Vector Integer
 oneOver d =
-    let places = oneHelper S.empty V.empty (computeOnePlace d) 1
+    let (_,places) = remTracker (S.empty, V.empty) (`myDivMod` d) 1
+        -- Drop leading zeros from place values
         trimmed = V.dropWhile (== 0) places
     in if V.length places == V.length trimmed then
            places
        else
            trimmed `V.snoc` 0
+
 
 foldOne :: Integer -> (Integer, Integer) -> (Integer, Integer)
 foldOne n' (p,m) =
