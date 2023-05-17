@@ -1,8 +1,8 @@
 module Prob7
-    (
-     run7
-    ,first670
-    ,findNextPrime
+    ( run7
+    , first670
+    , findNextPrime
+    , sieve
     )
     where
 
@@ -74,21 +74,16 @@ findNextPrime :: Int -> U.Vector Int -> Int
 findNextPrime p v =
     let rootp = croot $ fromIntegral p
         p' = innerloop p 0 rootp v
-    in case p' > 0 of
-         -- p' is prime
-         True -> p'
-         -- check the next integer / keep looking
-         False -> findNextPrime (p + 1) v
+    in if p' > 0 then
+           -- p' is prime
+           p'
+       else
+           findNextPrime (p + 1) v
     where
-      innerloop p'' k rootp v' =
-          case v ! k > rootp of
-            -- p is prime
-            True -> p''
-            False -> case p'' `rem` (v' ! k) == 0 of
-                       -- p isn't prime
-                       True -> 0
-                       -- keep checking if p is prime
-                       False -> innerloop p'' (k + 1) rootp v'
+      innerloop p'' k rootp v'
+          | v ! k > rootp = p''  -- p is prime
+          | p'' `rem` (v' ! k) == 0 = 0 -- p isn't prime
+          | otherwise = innerloop p'' (k + 1) rootp v'
 
 
 -- Generate the first few primes and utility functions
@@ -98,20 +93,22 @@ croot = ceiling . sqrt
 sieve :: U.Vector Int -> U.Vector Int
 sieve v =
     let loop i w =
-            case i ^ (2 :: Int) < (U.length v) of
-              True -> let v' = sieveHelper i w
-                      in loop (i+1) v'
-              False -> w
+            if i ^ (2 :: Int) < U.length v then
+                let v' = sieveHelper i w
+                in loop (i+1) v'
+            else
+                w
     in U.filter (>1) $ loop 2 v
 
 sieveHelper :: Int -> U.Vector Int -> U.Vector Int
 sieveHelper k v =
     let end = U.length v
         loop i w =
-            case i < end of
-              True -> let v' = w // [(i, 0)]
-                      in loop (i+k) v'
-              False -> w
+            if i < end then
+                let v' = w // [(i, 0)]
+                in loop (i+k) v'
+            else
+                w
     in loop (k ^ (2 :: Int)) v
 
 first670 :: U.Vector Int

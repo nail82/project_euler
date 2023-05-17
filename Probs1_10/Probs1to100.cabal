@@ -1,10 +1,10 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.33.0.
+-- This file has been generated from package.yaml by hpack version 0.35.0.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: f6821621a74d33d00358a15e2c9126fe6debdd9f01181cd8b165cd156f2791c9
+-- hash: 13a1a96306be524a92eb42bd18377a54e67f6beed342097c63774ec334cd04c9
 
 name:           Probs1to100
 version:        0.1.0.0
@@ -54,8 +54,6 @@ library
 
 executable Probs1to100-exe
   main-is: Main.hs
-  other-modules:
-      Paths_Probs1to100
   hs-source-dirs:
       app
   ghc-options: -threaded -rtsopts -with-rtsopts=-N

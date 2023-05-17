@@ -41,6 +41,9 @@ executables:
     - -with-rtsopts=-N
     dependencies:
     - Probs1to100
+    when:
+    - condition: false
+      other-modules: Paths_Probs1to100
 
 tests:
   Probs1to100-test:
