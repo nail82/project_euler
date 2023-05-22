@@ -1,5 +1,7 @@
 module Prob30 where
 
+import qualified Data.Vector as V
+
 {--
 
 Surprisingly there are only three numbers that can be written as the
@@ -17,6 +19,10 @@ Find the sum of all the numbers that can be written as the sum of
 fifth powers of their digits.
 
 --}
+
+fifthPowers :: V.Vector Integer
+fifthPowers =
+    V.fromList $ fmap (^ 5) [0..9]
 
 run30 :: IO ()
 run30 = do
